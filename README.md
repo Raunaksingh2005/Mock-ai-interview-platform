@@ -1,37 +1,51 @@
-# AI Recruitment Pipeline — End-to-End Machine Learning Evaluation
+# Mock AI Interview Platform — End-to-End ML Pipeline
 
-An end-to-end Machine Learning project that merges the Kaggle **AI Recruitment Pipeline Dataset** (`yaswanthkumary/ai-recruitment-pipeline-dataset`) with primary survey responses collected via Google Forms (`google_form_recruitment_dirty.xlsx`), cleans real-world data impurities, and implements supervised, unsupervised, association rule mining, and reinforcement learning techniques.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Raunaksingh2005/Mock-ai-interview-platform/blob/main/Mock_Ai_Interview_Platfrom_project.ipynb)
 
----
-
-## Dataset & Impurity Cleaning Pipeline
-
-1. **External Benchmark (`yaswanthkumary/ai-recruitment-pipeline-dataset`):** 10,174 candidate records containing `ID`, `Name`, `Role`, `Transcript`, `Resume`, `decision`, `Reason_for_decision`, and `Job_Description`.
-2. **Primary Survey Data (`google_form_recruitment_dirty.xlsx`):** 300 student responses with `Timestamp` (`Application_Date`), institutional/personal emails (`@chitkara.edu.in` & `@gmail.com`), and natural survey quirks (missing fields, duplicate submissions, inconsistent casing, whitespace, and placeholder strings).
-3. **Preprocessing & Feature Engineering:**
-   - Removed duplicates, standardized text/decision labels (`select` vs. `reject`), and dropped incomplete records.
-   - Engineered length features (`word_count`, `resume_length`, `job_length`) scaled with `StandardScaler` and `MinMaxScaler`.
-   - Computed lexical skill overlap (`relevance_score`) between candidate profiles and job descriptions.
-   - Extracted top 30 n-gram features via `TfidfVectorizer` and ANOVA F-test (`SelectKBest`).
+An end-to-end Machine Learning recruitment evaluation pipeline that integrates the Kaggle **AI Recruitment Pipeline Dataset** (`yaswanthkumary/ai-recruitment-pipeline-dataset`) with primary student survey data (`google_form_recruitment_dirty.xlsx`), cleans real-world data impurities, and benchmarks regression, classification, clustering, association rule mining, reinforcement learning, and ethical bias auditing.
 
 ---
 
-## Models & Algorithms Implemented
+## Dataset & Preprocessing Pipeline
 
-| Evaluation Unit | Techniques & Models | Metrics & Visualizations |
-| :--- | :--- | :--- |
-| **Supervised Regression** | Simple Linear, Multiple Linear, Polynomial Regression (deg=2) | MAE, MSE, RMSE, $R^2$ Score, Actual vs. Predicted Scatter |
-| **Supervised Classification** | Logistic Regression, KNN, Decision Tree, Random Forest, Naïve Bayes, SVM | Accuracy, Precision, Recall, F1-Score, Confusion Matrix |
-| **Model Validation** | Stratified Train-Test Split (80/20), 5-Fold Cross-Validation | Bias-Variance Trade-off Curve (Underfitting vs. Overfitting) |
-| **Unsupervised Clustering** | K-Means, Hierarchical (Agglomerative), DBSCAN | Silhouette Score, PCA 2D Cluster Scatter Plot |
-| **Dimensionality Reduction** | Principal Component Analysis (PCA) | Explained Variance Ratio (`77.98%` in 2 components) |
-| **Association & Recommender** | Apriori, FP-Growth, Cosine Similarity | Support, Confidence, Lift, Top-K Similar Candidates |
-| **RL & Ethical AI** | Q-Learning Adaptive Interview Simulation, Role Fairness Audit | Learned Q-Table, Selection Rate Parity Bar Chart |
+1. **Data Integration:** Merged 10,174 benchmark candidate records with 300 primary Google Form responses (`@chitkara.edu.in` & `@gmail.com`), aligning schemas (`ID`, `Name`, `Role`, `Transcript`, `Resume`, `decision`, `Reason_for_decision`, `Job_Description`, `Application_Date`).
+2. **Data Cleaning:** Removed duplicate submissions, standardized inconsistent casing/labels (`Select`, `SELECT `, ` selected` → `select`), replaced placeholder junk (`N/A`, `---`, `?`), and dropped incomplete entries, yielding **10,334 clean records** (`50.1%` selected, `49.9%` rejected).
+3. **Feature Engineering & Selection:**
+   - Scaled length features (`word_count`, `resume_length`, `job_length`) using `StandardScaler` and `MinMaxScaler`.
+   - Engineered a lexical skill-overlap `relevance_score` comparing candidate transcripts/resumes against job descriptions.
+   - Extracted top 30 n-gram features via `TfidfVectorizer(ngram_range=(1, 2))` and ANOVA F-test (`SelectKBest`), producing a **34-feature matrix**.
 
 ---
 
-## Quick Start
+## Experimental Results
 
-### 1. Install Dependencies
-```bash
-pip install -r requirements.txt
+### 1. Regression Models (Predicting `relevance_score`)
+| Model | MAE | MSE | RMSE | $R^2$ Score |
+| :--- | :---: | :---: | :---: | :---: |
+| Simple Linear Regression | 0.0987 | 0.0163 | 0.1277 | 0.0219 |
+| Multiple Linear Regression | 0.0834 | 0.0122 | 0.1105 | 0.2683 |
+| **Polynomial Regression (deg=2)** | **0.0816** | **0.0117** | **0.1083** | **0.2971** |
+
+### 2. Classification Models & 5-Fold Cross-Validation
+| Model | Test Accuracy | Precision | Recall | F1-Score | 5-Fold CV |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Random Forest** | **63.8%** | **0.64** | **0.65** | **0.64** | **59.0%** |
+| SVM (RBF) | 61.9% | 0.59 | 0.78 | 0.67 | 56.3% |
+| Logistic Regression | 61.0% | 0.60 | 0.67 | 0.63 | 58.8% |
+| Naïve Bayes | 60.1% | 0.60 | 0.60 | 0.60 | 54.2% |
+| Decision Tree (depth=5) | 58.7% | 0.56 | 0.84 | 0.67 | 55.5% |
+| KNN (k=5) | 58.2% | 0.58 | 0.58 | 0.58 | 53.1% |
+
+### 3. Unsupervised Learning, Association Rules & Reinforcement Learning
+- **PCA & Clustering:** 2 principal components retain **77.98%** of total variance; both K-Means and Hierarchical Clustering achieve a **0.644 Silhouette Score**.
+- **Association Rule Mining (FP-Growth & Apriori):** High-confidence keyword co-occurrence rules such as `{great} → {experience}` (`Support = 0.954`, `Confidence = 0.9997`).
+- **Cosine Similarity Recommender:** Retrieves the top-3 closest candidate profiles for peer benchmarking.
+- **Reinforcement Learning (Q-Learning) & Ethics:** Adaptive interview difficulty agent learns optimal progression policies (`Level Up` in Easy/Medium states, `Stay` in Hard state) alongside a role-wise selection rate fairness audit.
+
+---
+
+## Team Contributions
+- **Data Collection, Cleaning & Missing Values:** Pratham Maini (2410990661)
+- **Data Integration, Transformation & Reduction:** Ridhi Jain (2410990687)
+- **Feature Scaling, Engineering, Extraction & Selection:** Raunak Singh (2410990679)
+- **Model Training, Evaluation & Validation:** Sukhamrit Singh (2410990719)
